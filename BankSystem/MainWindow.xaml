@@ -83,6 +83,8 @@
     </Window.Resources>
 
     <Grid>
+        <Frame Margin="60 0 0 0" Background="Green"/>
+        
         <Border x:Name="sideMenu" Background="#333"
                 Width="60" HorizontalAlignment="Left"
                 MouseEnter="sideMenu_MouseEnter" MouseLeave="sideMenu_MouseLeave">
@@ -104,6 +106,5 @@
                 </Button>
             </StackPanel>
         </Border>
-        <Frame Margin="60 0 0 0" />
     </Grid>
 </Window>
