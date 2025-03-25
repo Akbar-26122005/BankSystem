@@ -9,9 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\accounts.png" />
+    <None Remove="images\credit_card.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Svg.Skia" Version="2.0.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="images\accounts.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\credit_card.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

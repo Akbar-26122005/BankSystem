@@ -7,20 +7,103 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
     <Window.Resources>
-        <Storyboard x:Key="AccountsBorderHoverEnterStoryBoard">
-            <DoubleAnimation
-                Storyboard.TargetName="AccountsBorder"
-                Storyboard.TargetProperty="Width"
-                To="300" Duration="0:0:0.3"/>
+
+        <!--<Storyboard x:Key="CustomButtonHoverStoryboard">
+            <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                            To="Gray" Duration="0:0:0.3"/>
         </Storyboard>
-        <Storyboard x:Key="AccountsBorderHoverLeaveStoryBoard">
+        <Storyboard x:Key="CustomButtonDefaultStoryboard">
+            <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                            To="Transparent" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="CustomButtonClickStoryboard">
+            <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                    To="#999" Duration="0:0:0.1"/>
+        </Storyboard>
+        <Storyboard x:Key="CustomButtonDefaultStoryboard2">
+            <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                    To="Transparent" Duration="0:0:0.1"/>
+        </Storyboard>-->
+        
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Cursor="{TemplateBinding Cursor}"
+                                CornerRadius="8"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <EventSetter Event="MouseEnter" Handler="Button_MouseEnter" />
+            <EventSetter Event="MouseLeave" Handler="Button_MouseLeave" />
+            <EventSetter Event="Click" Handler="Button_Click" />
+            <EventSetter Event="MouseUp" Handler="Button_MouseUp" />
+            <!--<Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    --><!--<Setter Property="Background" Value="#555" />--><!--
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource CustomButtonHoverStoryboard}" />
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource CustomButtonDefaultStoryboard}"/>
+                    </Trigger.ExitActions>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    --><!--<Setter Property="Background" Value="#fff"/>--><!--
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource CustomButtonClickStoryboard}" />
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource CustomButtonDefaultStoryboard2}" />
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>-->
+        </Style>
+        <Storyboard x:Key="sideMenuHoverEnterStoryBoard">
             <DoubleAnimation
-                Storyboard.TargetName="AccountsBorder"
+                Storyboard.TargetName="sideMenu"
+                Storyboard.TargetProperty="Width"
+                To="200" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="sideMenuHoverLeaveStoryBoard">
+            <DoubleAnimation
+                Storyboard.TargetName="sideMenu"
                 Storyboard.TargetProperty="Width"
                 To="60" Duration="0:0:0.3"/>
         </Storyboard>
     </Window.Resources>
 
     <Grid>
+        <Border x:Name="sideMenu" Background="#333"
+                Width="60" HorizontalAlignment="Left"
+                MouseEnter="sideMenu_MouseEnter" MouseLeave="sideMenu_MouseLeave">
+            <StackPanel x:Name="sideMenu_StackPanel" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                <Button Margin="10" Style="{StaticResource CustomButtonStyle}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="./images/accounts.png" Width="40" Height="40" />
+                        <TextBlock Text="Аккаунты" Opacity="0" Height="30"
+                                   Foreground="White" FontSize="17" Margin="20 0 0 0" />
+                    </StackPanel>
+                </Button>
+
+                <Button Margin="10" Style="{StaticResource CustomButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="./images/credit_card.png" Width="40" Height="40" />
+                        <TextBlock Text="Перевод" Opacity="0" Height="30"
+                                   Foreground="White" FontSize="17" Margin="20 0 0 0" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Frame Margin="60 0 0 0" />
     </Grid>
 </Window>
