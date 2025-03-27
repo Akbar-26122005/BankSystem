@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
+        Title="MainWindow" Height="500" Width="800" ResizeMode="NoResize">
     <Window.Resources>
 
         <!--<Storyboard x:Key="CustomButtonHoverStoryboard">
@@ -83,8 +83,8 @@
     </Window.Resources>
 
     <Grid>
-        <Frame Margin="60 0 0 0" Background="Green"/>
-        
+        <Frame x:Name="mainFrame" Margin="60 0 0 0" NavigationUIVisibility="Hidden"/>
+
         <Border x:Name="sideMenu" Background="#333"
                 Width="60" HorizontalAlignment="Left"
                 MouseEnter="sideMenu_MouseEnter" MouseLeave="sideMenu_MouseLeave">

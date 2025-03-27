@@ -13,16 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BankSystem
-{
-    /// <summary>
-    /// Логика взаимодействия для TransferPage.xaml
-    /// </summary>
-    public partial class TransferPage : Page
-    {
-        public TransferPage()
-        {
+namespace BankSystem {
+    public partial class TransferPage : Page {
+        private TransactionManager? transactionManager = null;
+        public TransferPage(TransactionManager transactionManager) {
             InitializeComponent();
+            this.transactionManager = transactionManager;
         }
     }
 }

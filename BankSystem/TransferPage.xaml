@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:BankSystem"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="TransferPage">
+      Title="TransferPage" Background="Green">
 
     <Grid>
         

@@ -10,14 +10,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BankSystem
-{
-    public partial class MainWindow : Window
-    {
-        Button? selectedButton = null;
-        public MainWindow()
-        {
+namespace BankSystem {
+    public partial class MainWindow : Window {
+        private Button? selectedButton = null;
+        private Dictionary<Button, Page> pages = new Dictionary<Button, Page>();
+        private TransactionManager transactionManager = new TransactionManager();
+
+        public MainWindow() {
             InitializeComponent();
+            pages.Add((Button)sideMenu_StackPanel.Children[0], new AccountsPage(transactionManager));
+            pages.Add((Button)sideMenu_StackPanel.Children[1], new TransferPage(transactionManager));
         }
 
         private void sideMenu_MouseEnter(object sender, MouseEventArgs e) {
@@ -46,7 +48,7 @@ namespace BankSystem
             }
         }
 
-        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject {
+        public static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++) {
                 DependencyObject child = VisualTreeHelper.GetChild(parent, i);
                 if (child is T typedChild) {
@@ -81,6 +83,10 @@ namespace BankSystem
             selectedButton = (Button)sender;
             ColorAnimation animation = new ColorAnimation { To = (Color)ColorConverter.ConvertFromString("#4A90E2"), Duration = new Duration(TimeSpan.FromSeconds(0.3)) };
             ((Button)sender).Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            foreach (var page in pages)
+                if (page.Key == sender)
+                    mainFrame.Content = page.Value;
         }
 
         private void Button_MouseUp(object sender, MouseButtonEventArgs e) {
