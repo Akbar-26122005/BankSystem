@@ -49,8 +49,8 @@ namespace BankSystem {
             Storyboard.SetTargetProperty(anim1, new PropertyPath("Margin"));
             Storyboard.SetTargetProperty(anim2, new PropertyPath("Margin"));
 
-            DoubleAnimation anim3 = new DoubleAnimation { To = 0, Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
-            DoubleAnimation anim4 = new DoubleAnimation { To = 0, Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
+            DoubleAnimation anim3 = new DoubleAnimation { To = 0, Duration = new Duration(TimeSpan.FromSeconds(0.6)) };
+            DoubleAnimation anim4 = new DoubleAnimation { To = 0, Duration = new Duration(TimeSpan.FromSeconds(0.6)) };
             Storyboard.SetTarget(anim3, border12);
             Storyboard.SetTarget(anim4, border22);
             Storyboard.SetTargetProperty(anim3, new PropertyPath("Opacity"));
@@ -60,6 +60,7 @@ namespace BankSystem {
             storyboard.Children.Add(anim2);
             storyboard.Children.Add(anim3);
             storyboard.Children.Add(anim4);
+            storyboard.Completed += Storyboard_Completed5;
             storyboard.Begin();
 
             previousStateButton.Visibility = Visibility.Visible;
@@ -68,8 +69,16 @@ namespace BankSystem {
             previousStateButton.BeginAnimation(Grid.OpacityProperty, anim5);
         }
 
+        private void Storyboard_Completed5(object? sender, EventArgs e) {
+            border12.Visibility = Visibility.Collapsed;
+            border22.Visibility = Visibility.Collapsed;
+        }
+
         private void Anim_Completed2(object? sender, EventArgs e) {
             previousStateButton.Visibility = Visibility.Collapsed;
+            border12.Visibility = Visibility.Visible;
+            border22.Visibility = Visibility.Visible;
+
             Storyboard storyboard = new Storyboard();
             ThicknessAnimation anim1 = new ThicknessAnimation { To = new Thickness(0), Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
             ThicknessAnimation anim2 = new ThicknessAnimation { To = new Thickness(0), Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
@@ -78,8 +87,8 @@ namespace BankSystem {
             Storyboard.SetTargetProperty(anim1, new PropertyPath("Margin"));
             Storyboard.SetTargetProperty(anim2, new PropertyPath("Margin"));
 
-            DoubleAnimation anim3 = new DoubleAnimation { To = 1, Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
-            DoubleAnimation anim4 = new DoubleAnimation { To = 1, Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
+            DoubleAnimation anim3 = new DoubleAnimation { To = 1, Duration = new Duration(TimeSpan.FromSeconds(0.3)) };
+            DoubleAnimation anim4 = new DoubleAnimation { To = 1, Duration = new Duration(TimeSpan.FromSeconds(0.3)) };
             Storyboard.SetTarget(anim3, border12);
             Storyboard.SetTarget(anim4, border22);
             Storyboard.SetTargetProperty(anim3, new PropertyPath("Opacity"));

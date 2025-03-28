@@ -7,54 +7,92 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TransferPage" Background="Wheat">
+    <Page.Resources>
+        <ControlTemplate x:Key="SubmitButtonTemplate" TargetType="Button">
+            <Border Background="{TemplateBinding Background}"
+                    CornerRadius="4" Width="{TemplateBinding Width}"
+                    Height="{TemplateBinding Height}">
+                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Border>
+        </ControlTemplate>
+        <Style x:Key="SubmitButtonStyle" TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Duration="0:0:0.3" Storyboard.TargetProperty="Width"
+                                    To="205" />
+                                <DoubleAnimation
+                                    Duration="0:0:0.3" Storyboard.TargetProperty="Height" 
+                                    To="26" />
+                                <ThicknessAnimation 
+                                    Duration="0:0:0.3" Storyboard.TargetProperty="Margin"
+                                    To="0 10 0 0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Duration="0:0:0.3"
+                                    Storyboard.TargetProperty="Width"
+                                    To="200" />
+                                <DoubleAnimation
+                                    Duration="0:0:0.3"
+                                    Storyboard.TargetProperty="Height"
+                                    To="24" />
+                                <ThicknessAnimation
+                                    Duration="0:0:0.3"
+                                    Storyboard.TargetProperty="Margin"
+                                    To="0 12 0 0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
 
     <Grid>
-        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Grid Width="320" Height="200">
-                <Border Background="#3F9C68" Width="320" Height="200"
-                        CornerRadius="12">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
-                    </Border.Effect>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBox Width="200" Height="24" FontSize="14" Margin="0 5 0 5" />
-                        <TextBox Width="200" Height="24" FontSize="14" Margin="0 5 0 5" />
-                    </StackPanel>
-                </Border>
-                <Border Background="#3F9C68" Width="320" Height="200" CornerRadius="12"/>
-            </Grid>
-            <Rectangle Width="60"/>
-            <Grid Width="320" Height="200">
-                <Border Background="#3F9C68" Width="320" Height="200"
-                        CornerRadius="12">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
-                    </Border.Effect>
-                </Border>
-                <Border Background="#3F9C68" Width="320" Height="200" CornerRadius="12"/>
-            </Grid>
-        </StackPanel>-->
-        <Grid HorizontalAlignment="Center"> 
-            <Grid x:Name="state1" Width="320" Height="200"> <!-- Margin 0 0 380 0 -->
+        <Grid HorizontalAlignment="Center">
+            <Grid x:Name="state1" Width="320" Height="200">
+                <!-- Margin 0 0 380 0 -->
                 <Border x:Name="border11" Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
                     </Border.Effect>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBox Width="200" Height="24" FontSize="14" Margin="0 5 0 5" />
-                        <TextBox Width="200" Height="24" FontSize="14" Margin="0 5 0 5" />
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Аккаунт" FontSize="14" Foreground="White"/>
+                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Пароль" FontSize="14" Foreground="White"/>
+                                <TextBox Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Сумма" FontSize="14"  Foreground="White"/>
+                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <Button Content="Перевести" Margin="0 12 0 0" FontSize="14"
+                                    Width="200" Height="24" Cursor="Hand"
+                                    Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border x:Name="border12" Background="#3F9C68" Width="320" Height="200" CornerRadius="12"/>
+                <Border x:Name="border12" Background="#3F9C68" Width="320" Height="200" CornerRadius="12" />
             </Grid>
-            <!--<Rectangle Width="60"/>-->
             <Grid x:Name="state2" Width="320" Height="200"> <!-- Margin 380 0 0 0 -->
                 <Border x:Name="border21" Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
                     </Border.Effect>
                 </Border>
-                <Border x:Name="border22" Background="#3F9C68" Width="320" Height="200" CornerRadius="12"/>
+                <Border x:Name="border22" Background="#3F9C68" Width="320" Height="200" CornerRadius="12" />
             </Grid>
             <Grid x:Name="state3" Width="320" Height="200">
                 <Grid x:Name="border31">
@@ -62,56 +100,15 @@
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Аккаунт" FontSize="14" Foreground="White"/>
-                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5"/>
+                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Сумма" FontSize="14"  Foreground="White"/>
-                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5"/>
+                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
-                            <Button Content="Hello world" Margin="0 12 0 0" FontSize="14"
-                                Width="200" Height="24" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                            CornerRadius="4" Width="{TemplateBinding Width}"
-                                            Height="{TemplateBinding Height}">
-                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Trigger.EnterActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation To="190" Duration="0:0:0.3"
-                                                                            Storyboard.TargetProperty="Width" />
-                                                            <DoubleAnimation To="22" Duration="0:0:0.3"
-                                                                            Storyboard.TargetProperty="Height" />
-                                                            <ThicknessAnimation To="0 14 0 0" Duration="0:0:0.3"
-                                                                            Storyboard.TargetProperty="Margin"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </Trigger.EnterActions>
-                                                <Trigger.ExitActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation To="200" Duration="0:0:0.3"
-                                                                            Storyboard.TargetProperty="Width" />
-                                                            <DoubleAnimation To="24" Duration="0:0:0.3"
-                                                                            Storyboard.TargetProperty="Height" />
-                                                            <ThicknessAnimation To="0 12 0 0" Duration="0:0:0.3"
-                                                                            Storyboard.TargetProperty="Margin"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </Trigger.ExitActions>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
+                            <Button Content="Пополнить" Margin="0 12 0 0" FontSize="14"
+                                    Width="200" Height="24" Cursor="Hand"
+                                    Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"/>
                         </StackPanel>
                     </Border>
                     <Button x:Name="nextStateButton" Background="Transparent" Width="40" Height="40" BorderThickness="0"
