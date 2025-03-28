@@ -69,6 +69,7 @@ namespace BankSystem {
         }
 
         private void Anim_Completed2(object? sender, EventArgs e) {
+            previousStateButton.Visibility = Visibility.Collapsed;
             Storyboard storyboard = new Storyboard();
             ThicknessAnimation anim1 = new ThicknessAnimation { To = new Thickness(0), Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
             ThicknessAnimation anim2 = new ThicknessAnimation { To = new Thickness(0), Duration = new Duration(TimeSpan.FromSeconds(0.4)) };
