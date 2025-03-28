@@ -12,24 +12,33 @@
         <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
             <ListView x:Name="AccountItems" Background="Transparent" HorizontalAlignment="Left"
                       ScrollViewer.CanContentScroll="False" Width="500">
+                <!--Пример отображения банковского аккаунта-->
                 <Border Background="#2E8B57" Width="460" Height="60" CornerRadius="8"
                         BorderThickness="1" BorderBrush="Black">
                     <Grid>
                         <TextBlock Text="#0000 0000 0000 0000" FontSize="20"
                                    VerticalAlignment="Center" HorizontalAlignment="Center"
                                    Margin="0 0 100 0" Foreground="#FFC3A0"
-                                   TextDecorations="Underline"/>
+                                   TextDecorations="None"/>
+                        <TextBlock Text="Пополнить" Foreground="DarkGray" FontSize="15"
+                                   VerticalAlignment="Top" HorizontalAlignment="Right"
+                                   Margin="0 3 10 0"/>
                         <TextBlock Text="500p" HorizontalAlignment="Right"
-                                   VerticalAlignment="Bottom" FontSize="15"
-                                   Foreground="DarkGray" Margin="0 0 10 3"/>
+                                    VerticalAlignment="Bottom" FontSize="15"
+                                    Foreground="DarkGray" Margin="0 0 10 3"/>
                     </Grid>
                 </Border>
             </ListView>
             <Border Background="#B0B0B0" Width="240" CornerRadius="10 0 0 10">
                 <Grid>
-                    <Grid Background="Red" Margin="0 0 0 40">
-
-                    </Grid>
+                    <Border Background="#B0B0B0" Margin="5 5 5 40"
+                            BorderThickness="1" BorderBrush="Black" CornerRadius="0 0 10 10">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Direction="315"
+                                              RenderingBias="Quality" ShadowDepth="5"
+                                              Color="Black" Opacity="0.5"/>
+                        </Border.Effect>
+                    </Border>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom" Margin="0 0 0 8">
                         <Button Content="Добавить" FontSize="14" Width="80"

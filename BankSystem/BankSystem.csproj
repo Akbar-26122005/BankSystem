@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="images\accounts.png" />
+    <None Remove="images\arrow_forward.png" />
     <None Remove="images\credit_card.png" />
   </ItemGroup>
 
@@ -23,6 +24,9 @@
 
   <ItemGroup>
     <Content Include="images\accounts.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\arrow_forward.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="images\credit_card.png">
