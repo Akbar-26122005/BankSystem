@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -32,10 +35,14 @@ namespace BankSystem {
     }
 
     public class BankAccount {
-        public long Id { get; }
-        private double Balance;
+        public long Id { get; set; }
+        public double Balance { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        //public static BankAccount GetBankAccount(long id) {
+        //    return new BankAccount { Id = id, Balance = 0, Email = "email", Password = "password" };
+        //}
 
         public BankAccount() {
             Id = GenerateNewId();
@@ -87,10 +94,27 @@ namespace BankSystem {
         }
     }
 
+    //public class CurrencyConverter {
+    //    private readonly string apiKey = "";
+    //    private readonly string apiUrl = "https://api.exchangerate-api.com/v4/latest/";
+
+    //    public async Task<double> Convert(string fromCurrency, string toCurrency, double amount) {
+    //        using (HttpClient client = new HttpClient()) {
+    //            var response = await client.GetStringAsync(apiUrl + fromCurrency);
+    //            var rates = JObject.Parse(response)["rates"];
+    //            double convertionRate = rates[toCurrency].Value<double>();
+    //            return amount * convertionRate;
+    //        }
+    //    }
+    //}
+
     public class TransactionManager {
-        private readonly AccountsContext context = new AccountsContext(
-            
-        );
+        private readonly AccountsContext context = new AccountsContext();
+
+        public TransactionManager() {
+            //context.Accounts.Add(BankAccount.GetBankAccount(1111_1111_1111_1111));
+            //context.SaveChanges();
+        }
 
         public void Transfer(int fromAccountId, int toAccountId, double amount, string password) {
             var fromAccount = context.Accounts.FirstOrDefault(acc => acc.Id == fromAccountId);
@@ -115,10 +139,20 @@ namespace BankSystem {
             context.SaveChanges();
         }
 
+        public bool Deposit(long accountId, double amount) {
+            BankAccount? account = context.Accounts.FirstOrDefault(a => a.Id == accountId);
+            if (account == null) return false;
+            account.Deposit(amount);
+            context.SaveChanges();
+            return true;
+        }
+
         public BankAccount? FindAccount(Func<BankAccount, bool> predicate) {
             return context.Accounts.FirstOrDefault(predicate);
         }
 
         public List<BankAccount> GetAllAccounts() => context.Accounts.ToList();
+
+        public void SaveChanges() => context.SaveChanges();
     }
 }

@@ -24,7 +24,7 @@ namespace BankSystem {
             UpdateAccountsItem();
         }
 
-        private void UpdateAccountsItem() {
+        public void UpdateAccountsItem() {
             if (transactionManager == null) return;
             AccountItems.Items.Clear();
             foreach (var account in transactionManager.GetAllAccounts()) {
@@ -41,12 +41,15 @@ namespace BankSystem {
                 Child = new Grid {
                     Children = {
                         new TextBlock {
-                            Text = $"{account.Id}", FontSize = 20, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFC3A0")),
-                            VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center,
-                            Margin = new Thickness(0, 0, 100, 0), TextDecorations = TextDecorations.Underline
+                            Text = $"{/*GetIdToString(account.Id)*/account.Id}", FontSize = 20, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFC3A0")),
+                            VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 100, 0)
                         },
                         new TextBlock {
-                            Text = $"{account.GetBalance()}", FontSize = 15, Foreground = new SolidColorBrush(Colors.DarkGray), Margin = new Thickness(0, 0, 10, 3),
+                            Text = "Баланс", FontSize = 15, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFC3A0")),
+                            VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 3, 10, 0)
+                        },
+                        new TextBlock {
+                            Text = $"{account.GetBalance()}₽", FontSize = 15, Foreground = new SolidColorBrush(Colors.DarkGray), Margin = new Thickness(0, 0, 10, 3),
                             HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom,
                         }
                     }
@@ -54,6 +57,18 @@ namespace BankSystem {
             };
 
             return border;
+        }
+
+        private string GetIdToString(long id) {
+            string[] _id = { "", "", "", "" };
+            for (int i = 0; i < 16; i++) {
+                _id[i / 4] += id.ToString()[i];
+            }
+            string result = "";
+            foreach (var i in _id) {
+                result += $"{i} ";
+            }
+            return result;
         }
 
         private void AddAccountButton_Click(object sender, RoutedEventArgs e) {

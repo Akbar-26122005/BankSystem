@@ -68,18 +68,17 @@
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Аккаунт" FontSize="14" Foreground="White"/>
-                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="tbAccount1" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Пароль" FontSize="14" Foreground="White"/>
-                                <TextBox Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="tbPassword1" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Сумма" FontSize="14"  Foreground="White"/>
-                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="tbAmount1" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
-                            <Button Content="Перевести" Margin="0 12 0 0" FontSize="14"
-                                    Width="200" Height="24" Cursor="Hand"
+                            <Button x:Name="transferButton" Content="Перевести" Margin="0 12 0 0" FontSize="14" Width="200" Height="24" Cursor="Hand"
                                     Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"/>
                         </StackPanel>
                     </StackPanel>
@@ -91,6 +90,14 @@
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
                     </Border.Effect>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Аккаунт" FontSize="14" Foreground="White"/>
+                                <TextBox x:Name="tbAccount2" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
                 </Border>
                 <Border x:Name="border22" Background="#3F9C68" Width="320" Height="200" CornerRadius="12" />
             </Grid>
@@ -100,15 +107,15 @@
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Аккаунт" FontSize="14" Foreground="White"/>
-                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="tbAccount3" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Сумма" FontSize="14"  Foreground="White"/>
-                                <TextBox  Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="tbAmount3" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
-                            <Button Content="Пополнить" Margin="0 12 0 0" FontSize="14"
-                                    Width="200" Height="24" Cursor="Hand"
-                                    Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"/>
+                            <Button x:Name="depositButton" Content="Пополнить" Margin="0 12 0 0" FontSize="14" Width="200" Height="24" Cursor="Hand"
+                                    Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"
+                                    Click="depositButton_Click"/>
                         </StackPanel>
                     </Border>
                     <Button x:Name="nextStateButton" Background="Transparent" Width="40" Height="40" BorderThickness="0"

@@ -22,6 +22,10 @@ namespace BankSystem {
             pages.Add((Button)sideMenu_StackPanel.Children[1], new TransferPage(transactionManager));
         }
 
+        private void Window_Closed(object sender, EventArgs e) {
+            transactionManager.SaveChanges();
+        }
+
         private void sideMenu_MouseEnter(object sender, MouseEventArgs e) {
             Storyboard storyboard = (Storyboard)FindResource("sideMenuHoverLeaveStoryBoard");
             storyboard.Stop();
@@ -84,9 +88,11 @@ namespace BankSystem {
             ColorAnimation animation = new ColorAnimation { To = (Color)ColorConverter.ConvertFromString("#4A90E2"), Duration = new Duration(TimeSpan.FromSeconds(0.3)) };
             ((Button)sender).Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
 
+            pages[(Button)sideMenu_StackPanel.Children[0]] = new AccountsPage(transactionManager);
             foreach (var page in pages)
-                if (page.Key == sender)
+                if (page.Key == sender) {
                     mainFrame.Content = page.Value;
+                }
         }
 
         private void Button_MouseUp(object sender, MouseButtonEventArgs e) {

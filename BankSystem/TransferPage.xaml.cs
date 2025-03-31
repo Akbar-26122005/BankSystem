@@ -113,5 +113,20 @@ namespace BankSystem {
         private void Anim_Completed4(object? sender, EventArgs e) {
             border32.Visibility = Visibility.Collapsed;
         }
+
+        private void depositButton_Click(object sender, RoutedEventArgs e) {
+            if (sender == depositButton) {
+                try {
+                    long accountId = long.Parse(tbAccount3.Text);
+                    double amount = double.Parse(tbAmount3.Text);
+                    if (transactionManager is null) return;
+                    transactionManager.Deposit(accountId, amount);
+                } catch (Exception ex) {
+                    MessageBox.Show(ex.Message);
+                }
+            } else if (sender == transferButton) {
+
+            }
+        }
     }
 }

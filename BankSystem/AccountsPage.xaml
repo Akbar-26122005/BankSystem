@@ -20,7 +20,7 @@
                                    VerticalAlignment="Center" HorizontalAlignment="Center"
                                    Margin="0 0 100 0" Foreground="#FFC3A0"
                                    TextDecorations="None"/>
-                        <TextBlock Text="Пополнить" Foreground="DarkGray" FontSize="15"
+                        <TextBlock Text="Баланс" Foreground="DarkGray" FontSize="15"
                                    VerticalAlignment="Top" HorizontalAlignment="Right"
                                    Margin="0 3 10 0"/>
                         <TextBlock Text="500p" HorizontalAlignment="Right"
@@ -38,6 +38,7 @@
                                               RenderingBias="Quality" ShadowDepth="5"
                                               Color="Black" Opacity="0.5"/>
                         </Border.Effect>
+                        <!--Вот тут продолжаем писать код-->
                     </Border>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom" Margin="0 0 0 8">
