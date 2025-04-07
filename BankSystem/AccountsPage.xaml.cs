@@ -49,7 +49,7 @@ namespace BankSystem {
                             VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 3, 10, 0)
                         },
                         new TextBlock {
-                            Text = $"{account.GetBalance()}₽", FontSize = 15, Foreground = new SolidColorBrush(Colors.DarkGray), Margin = new Thickness(0, 0, 10, 3),
+                            Text = $"{account.GetBalance("RUB")}₽", FontSize = 15, Foreground = new SolidColorBrush(Colors.DarkGray), Margin = new Thickness(0, 0, 10, 3),
                             HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom,
                         }
                     }

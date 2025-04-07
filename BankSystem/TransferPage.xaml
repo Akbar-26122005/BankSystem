@@ -58,12 +58,15 @@
 
     <Grid>
         <Grid HorizontalAlignment="Center">
+            <!--Состояние 1-->
             <Grid x:Name="state1" Width="320" Height="200">
                 <!-- Margin 0 0 380 0 -->
-                <Border x:Name="border11" Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
+                <Border>
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
                     </Border.Effect>
+                </Border>
+                <Border x:Name="border11" Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -75,8 +78,9 @@
                                 <TextBox x:Name="tbPassword1" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Label Content="Сумма" FontSize="14"  Foreground="White"/>
-                                <TextBox x:Name="tbAmount1" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                                <Label Content="Валюта" FontSize="14" Foreground="White" />
+                                <ComboBox x:Name="currencies1" Width="160" Height="23" Margin="0 5 0 5"
+                                    VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                             </StackPanel>
                             <Button x:Name="transferButton" Content="Перевести" Margin="0 12 0 0" FontSize="14" Width="200" Height="24" Cursor="Hand"
                                     Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"/>
@@ -85,22 +89,35 @@
                 </Border>
                 <Border x:Name="border12" Background="#3F9C68" Width="320" Height="200" CornerRadius="12" />
             </Grid>
+            <!--Состояние 2-->
             <Grid x:Name="state2" Width="320" Height="200"> <!-- Margin 380 0 0 0 -->
-                <Border x:Name="border21" Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
+                <Border>
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Opacity="0.5"/>
                     </Border.Effect>
+                </Border>
+                <Border x:Name="border21" Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Label Content="Аккаунт" FontSize="14" Foreground="White"/>
                                 <TextBox x:Name="tbAccount2" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Сумма" FontSize="14"  Foreground="White"/>
+                                <TextBox x:Name="tbAmount1" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Валюта" FontSize="14" Foreground="White" />
+                                <ComboBox x:Name="currencies2" Width="160" Height="23" Margin="0 5 0 5"
+                                    VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border x:Name="border22" Background="#3F9C68" Width="320" Height="200" CornerRadius="12" />
             </Grid>
+            <!--Состояние 3-->
             <Grid x:Name="state3" Width="320" Height="200">
                 <Grid x:Name="border31">
                     <Border Background="#3F9C68" Width="320" Height="200" CornerRadius="12">
@@ -113,6 +130,11 @@
                                 <Label Content="Сумма" FontSize="14"  Foreground="White"/>
                                 <TextBox x:Name="tbAmount3" Width="160" Height="23" FontSize="14" Margin="0 5 0 5" VerticalContentAlignment="Center"/>
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Валюта" FontSize="14" Foreground="White" />
+                                <ComboBox x:Name="currencies3" Width="160" Height="23" Margin="0 5 0 5"
+                                    VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            </StackPanel>
                             <Button x:Name="depositButton" Content="Пополнить" Margin="0 12 0 0" FontSize="14" Width="200" Height="24" Cursor="Hand"
                                     Style="{StaticResource SubmitButtonStyle}" Template="{StaticResource SubmitButtonTemplate}"
                                     Click="depositButton_Click"/>
@@ -120,7 +142,7 @@
                     </Border>
                     <Button x:Name="nextStateButton" Background="Transparent" Width="40" Height="40" BorderThickness="0"
                         VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="StateButton_Click" Cursor="Hand">
-                        <Image Source="./images/arrow_forward.png" />
+                        <Image Source="./images/credit_card.png" />
                     </Button>
                 </Grid>
                 <Border x:Name="border32" Background="#3F9C68" Width="320" Height="200" CornerRadius="12"

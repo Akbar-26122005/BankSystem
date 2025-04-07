@@ -7,6 +7,21 @@
       mc:Ignorable="d"
       d:DesignHeight="500" d:DesignWidth="740"
       Title="AccountsPage">
+    <Page.Resources>
+        <Style x:Key="InfoTileStyle" TargetType="Border">
+            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="BorderBrush" Value="#333" />
+            <Setter Property="BorderThickness" Value="0.5 0.5 1 1" />
+            <Setter Property="Margin" Value="0 4 0 0" />
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style x:Key="InfoTileLabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="#333" />
+            <Setter Property="FontSize" Value="14"       />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Page.Resources>
 
     <Grid Background="#B8D8C8">
         <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
@@ -32,13 +47,22 @@
             <Border Background="#B0B0B0" Width="240" CornerRadius="10 0 0 10">
                 <Grid>
                     <Border Background="#B0B0B0" Margin="5 5 5 40"
-                            BorderThickness="1" BorderBrush="Black" CornerRadius="0 0 10 10">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="10" Direction="315"
-                                              RenderingBias="Quality" ShadowDepth="5"
-                                              Color="Black" Opacity="0.5"/>
-                        </Border.Effect>
+                            BorderThickness="0.4 0.4 1 1" BorderBrush="Black" CornerRadius="0 0 10 10">
                         <!--Вот тут продолжаем писать код-->
+                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <Border Style="{StaticResource InfoTileStyle}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Label Content="ID" Style="{StaticResource InfoTileLabelStyle}" />
+                                    <TextBox Width="140"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource InfoTileStyle}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Label Content="Password" Style="{StaticResource InfoTileLabelStyle}" />
+                                    <TextBox Width="140" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
                     </Border>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom" Margin="0 0 0 8">

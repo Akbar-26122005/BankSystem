@@ -21,6 +21,14 @@ namespace BankSystem {
         public TransferPage(TransactionManager transactionManager) {
             InitializeComponent();
             this.transactionManager = transactionManager;
+
+            currencies1.ItemsSource = BankAccount.Currencies;
+            currencies2.ItemsSource = BankAccount.Currencies;
+            currencies3.ItemsSource = BankAccount.Currencies;
+
+            currencies1.SelectedIndex = 0;
+            currencies2.SelectedIndex = 0;
+            currencies3.SelectedIndex = 0;
         }
 
         private void StateButton_Click(object sender, RoutedEventArgs e) {
@@ -119,8 +127,9 @@ namespace BankSystem {
                 try {
                     long accountId = long.Parse(tbAccount3.Text);
                     double amount = double.Parse(tbAmount3.Text);
+                    string currency = currencies3.Text;
                     if (transactionManager is null) return;
-                    transactionManager.Deposit(accountId, amount);
+                    transactionManager.Deposit(accountId, amount, currency);
                 } catch (Exception ex) {
                     MessageBox.Show(ex.Message);
                 }
