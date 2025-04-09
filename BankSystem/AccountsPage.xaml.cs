@@ -115,6 +115,7 @@ namespace BankSystem {
                 var id = MainWindow.FindVisualChild<TextBlock>(MainWindow.FindVisualChild<Grid>(border)).Text.ToString();
                 BankAccount account = transactionManager!.FindAccount(a => a.Id == new Guid(id))!;
                 propertyId.Text = account.Id.ToString();
+                propertyEmail.Text = account.Email;
                 propertyPassword.Text = account.Password;
 
                 PropertiesCurrenciesBallances.Children.Clear();

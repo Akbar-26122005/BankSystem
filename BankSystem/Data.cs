@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
 using System.Windows.Markup;
+using System.Net;
+using System.Net.Mail;
+
 
 namespace BankSystem {
     public class AccountsContext : DbContext {
@@ -148,7 +151,19 @@ namespace BankSystem {
                     finalAmount = await currencyConverter.Convert(fromCurrency, toCurrency, amount);
                 }
                 toAccount.Deposit(finalAmount, toCurrency);
-                Console.WriteLine("Деньги успешно переведены");
+
+                //var smtpServer = "smtp.example.com";
+                //var smtpPort = 587;
+                //var smtpUser = ""; // Нужно ввести email
+                //var smtpPass = ""; // Пароль
+
+                //var emailNotifier = new EmailNotifier(smtpServer, smtpPort, smtpUser, smtpPass);
+
+                //string toEmail = fromAccount.Email;
+                //string subject = "Текстовое письмо";
+                //string body = "<h1>Средства переведены</h1><p>С вашего счета были переведены денежные средства</p>";
+
+                //emailNotifier.SendEmail(toEmail, subject, body);
             }
             catch (Exception ex) {
                 Console.WriteLine($"Error: {ex.Message}");
@@ -198,6 +213,41 @@ namespace BankSystem {
             var rates = JObject.Parse(response)["rates"];
             var rate = rates![toCurrency]!.Value<decimal>();
             return amount * rate;
+        }
+    }
+
+    // Модуль нотификации пользователей
+    public class EmailNotifier {
+        private readonly string _smtpServer;
+        private readonly int _smtpPort;
+        private readonly string _smtpUser;
+        private readonly string _smtpPass;
+
+        public EmailNotifier(string smtpServer, int smtpPort, string smtpUser, string smtpPass) {
+            _smtpServer = smtpServer;
+            _smtpPort = smtpPort;
+            _smtpUser = smtpUser;
+            _smtpPass = smtpPass;
+        }
+
+        public void SendEmail(string toEmail, string subject, string body) {
+            try {
+                using (var message = new MailMessage()) {
+                    message.From = new MailAddress(_smtpUser);
+                    message.To.Add(toEmail);
+                    message.Subject = subject;
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+
+                    using (var client = new SmtpClient(_smtpServer, _smtpPort)) {
+                        client.Credentials = new NetworkCredential(_smtpUser, _smtpPass);
+                        client.EnableSsl = true;
+                        client.Send(message);
+                    }
+                }
+            } catch (Exception ex) {
+                Console.WriteLine($"Ошибка при отправке письма: {ex.Message}");
+            }
         }
     }
 }

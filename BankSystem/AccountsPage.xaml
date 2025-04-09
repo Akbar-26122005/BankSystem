@@ -63,6 +63,12 @@
                             </Border>
                             <Border Style="{StaticResource InfoTileStyle}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Label Content="Email" Style="{StaticResource InfoTileLabelStyle}" />
+                                    <TextBox x:Name="propertyEmail" Width="140" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource InfoTileStyle}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Label Content="Password" Style="{StaticResource InfoTileLabelStyle}" />
                                     <TextBox x:Name="propertyPassword" Width="140" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                                 </StackPanel>
