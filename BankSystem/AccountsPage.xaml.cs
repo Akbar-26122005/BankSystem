@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 
 namespace BankSystem {
     public partial class AccountsPage : Page {
-        private Border? selectedAccountItem = null;
         private TransactionManager? transactionManager = null;
 
         public AccountsPage(TransactionManager transactionManager) {
@@ -41,16 +40,11 @@ namespace BankSystem {
                 Child = new Grid {
                     Children = {
                         new TextBlock {
-                            Text = $"{/*GetIdToString(account.Id)*/account.Id}", FontSize = 20, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFC3A0")),
-                            VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 100, 0)
-                        },
-                        new TextBlock {
-                            Text = "Баланс", FontSize = 15, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFC3A0")),
-                            VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 3, 10, 0)
-                        },
-                        new TextBlock {
-                            Text = $"{account.GetBalance("RUB")}₽", FontSize = 15, Foreground = new SolidColorBrush(Colors.DarkGray), Margin = new Thickness(0, 0, 10, 3),
-                            HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom,
+                            Text = $"{account.Id}", FontSize = 18,
+                            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFC3A0")),
+                            VerticalAlignment = VerticalAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            Margin = new Thickness(0, 0, 100, 0)
                         }
                     }
                 }
@@ -59,31 +53,75 @@ namespace BankSystem {
             return border;
         }
 
-        private string GetIdToString(long id) {
-            string[] _id = { "", "", "", "" };
-            for (int i = 0; i < 16; i++) {
-                _id[i / 4] += id.ToString()[i];
-            }
-            string result = "";
-            foreach (var i in _id) {
-                result += $"{i} ";
-            }
-            return result;
-        }
-
         private void AddAccountButton_Click(object sender, RoutedEventArgs e) {
             if (transactionManager == null) return;
-            transactionManager.AddAccount(new BankAccount());
+            BankAccount account = new BankAccount();
+            account.Currencies = new List<Currency>();
+
+            for (int i = 0; i < Currency.Currencies.Count; i++) {
+                account.Currencies.Add(new Currency(i, 0));
+            }
+
+            transactionManager.AddAccount(account);
             UpdateAccountsItem();
         }
 
         private void DeleteAccountButton_Click(object sender, RoutedEventArgs e) {
             if (AccountItems.SelectedItem == null || transactionManager == null) return;
             string id = MainWindow.FindVisualChild<TextBlock>((Border)AccountItems.SelectedItem).Text;
-            BankAccount? account = transactionManager.FindAccount(account => account.Id == long.Parse(id));
+            BankAccount? account = transactionManager.FindAccount(account => account.Id == new Guid(id));
             if (account == null) return;
             transactionManager.RemoveAccount(account);
             UpdateAccountsItem();
+        }
+
+        private void CopyButton_Click(object sender, RoutedEventArgs e) {
+            if (AccountItems.SelectedItem is null) return;
+            else if (AccountItems.SelectedItem is Border border) {
+                Clipboard.SetText(
+                    MainWindow.FindVisualChild<TextBlock>(
+                        MainWindow.FindVisualChild<Grid>(border)
+                    ).Text.ToString()
+                );
+            }
+        }
+
+        private Border CreatePropertyElement(string content, string text) {
+            Border border = new Border {
+                Style = FindResource("InfoTileStyle") as Style,
+                Child = new StackPanel {
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Children = {
+                        new Label {
+                            Content = content,
+                            Style = FindResource("InfoTileLabelStyle") as Style
+                        },
+                        new TextBox {
+                            Width = 140,
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            HorizontalContentAlignment = HorizontalAlignment.Center,
+                            Text = text
+                        }
+                    }
+                }
+            };
+
+            return border;
+        }
+
+        private void AccountItems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (AccountItems.SelectedItem is Border border) {
+                var id = MainWindow.FindVisualChild<TextBlock>(MainWindow.FindVisualChild<Grid>(border)).Text.ToString();
+                BankAccount account = transactionManager!.FindAccount(a => a.Id == new Guid(id))!;
+                propertyId.Text = account.Id.ToString();
+                propertyPassword.Text = account.Password;
+
+                PropertiesCurrenciesBallances.Children.Clear();
+                foreach (var currency in account.Currencies) {
+                    PropertiesCurrenciesBallances.Children.Add(CreatePropertyElement(currency.Name!, account.GetBalance(currency.Name!).ToString()));
+                }
+            }
         }
     }
 }

@@ -13,16 +13,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Windows.Markup;
 
 namespace BankSystem {
     public class AccountsContext : DbContext {
         public DbSet<BankAccount> Accounts { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
 
         public AccountsContext() => Database.EnsureCreated();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            // Указываем Id как первичный ключ
             modelBuilder.Entity<BankAccount>()
-                .HasKey(b => b.Id); // Указываем Id как первичный ключ
+                .HasKey(b => b.Id);
+            modelBuilder.Entity<Currency>()
+                .HasKey(c => c.Id);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
@@ -32,108 +38,98 @@ namespace BankSystem {
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseLazyLoadingProxies()
+                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+        }
+    }
+
+    public class Currency {
+        public static List<string> Currencies { get; private set; } = new List<string>() { "RUB", "USD", "EUR" };
+
+        public int Id { get; set; }
+        public string? Name { get; private set; }
+        public decimal Amount { get; set; }
+
+        public Guid BankAccountId { get; set; }
+        public virtual BankAccount? BankAccount { get; set; }
+
+        public Currency() {
+            Name = "RUB";
+            Amount = 0;
+        }
+
+        public Currency(int currency, decimal amount) {
+            Name = currency < 0 || currency >= Currencies.Count ? Currencies[0] : Currencies[currency];
+            Amount = amount;
         }
     }
 
     public class BankAccount {
-        public long Id { get; set; }
-        public double Balance { get; set; }
+        public Guid Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public static readonly List<string> Currencies = new List<string>() { "RUB", "USD", "EUR" };
-        public List<double> Balances;
+        public virtual List<Currency> Currencies { get; set; }
 
         public BankAccount() {
-            Id = GenerateNewId();
-            Balance = 0;
+            Id = Guid.NewGuid();
             Email = "";
             Password = "1234";
-
-            Balances = new List<double>();
-            for (int i = 0; i < Currencies.Count; i++) {
-                Balances.Add(0);
-            }
+            Currencies = new List<Currency>();
         }
 
         public BankAccount(double initialBalance, string email, string password, List<double> balances) {
-            Id = GenerateNewId();
-            Balance = initialBalance;
+            Id = Guid.NewGuid();
             Email = email;
             Password = password;
-
-            Balances = balances;
-            if (Balances.Count < Currencies.Count) {
-                for (int i = 0; i < Currencies.Count; i++) {
-                    Balances.Add(0);
-                }
-            }
+            Currencies = new List<Currency>();
         }
 
-        //public double GetBalance() => Balance;
-        public double GetBalance(string currency) => Balances[Currencies.IndexOf(currency)];
+        public decimal GetBalance(string currencyName) {
+            AccountsContext context = new AccountsContext();
+            foreach (var currency in context.Currencies) {
+                if (currency.BankAccountId == this.Id && currency.Name == currencyName) {
+                    return currency.Amount;
+                }
+            }
+            throw new Exception($"Такой валюты не существует! ({Currencies.Count})");
+        }
 
-        public void Withdraw(double amount, string password, string currency) {
+        public void Withdraw(decimal amount, string password, string currency) {
             if (this.Password != password)
                 throw new UnauthorizedAccessException("Неверный пароль");
-            else if (Balances[Currencies.IndexOf(currency)] < amount)
+
+            Currency Currency = Currencies.FirstOrDefault(c => c.Name == currency)!;
+            if (Currency.Amount < amount)
                 throw new InsufficientFundsError("В балансе не хватает средств");
             else if (amount < 0)
                 throw new InvalidAmountError("Пополняемая сумма отрицательная");
 
-            Balances[Currencies.IndexOf(currency)] -= amount;
+            Currency.Amount -= amount;
         }
 
-        public void Deposit(double amount, string currency) {
+        public void Deposit(decimal amount, string currency) {
             if (amount < 0)
                 throw new InvalidAmountError("Пополняемая сумма отрицательная");
 
-            Balances[Currencies.IndexOf(currency)] += amount;
-        }
-
-        public long GenerateNewId() {
-            string id = "";
-            for (int i = 0; i < 16; i++) {
-                int result = new Random().Next(0, 10);
-                if (id == "" && result == 0) i--;
-                else {
-                    id += result.ToString();
-                }
-            }
-            return long.Parse(id);
+            Currency Currency = Currencies.FirstOrDefault(c => c.Name == currency)!;
+            Currency.Amount += amount;
         }
 
         public override string ToString() {
-            return $"{Id},{Balance},{Email},{Password}";
+            return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
         }
     }
-
-    //public class CurrencyConverter {
-    //    private readonly string apiKey = "";
-    //    private readonly string apiUrl = "https://api.exchangerate-api.com/v4/latest/";
-
-    //    public async Task<double> Convert(string fromCurrency, string toCurrency, double amount) {
-    //        using (HttpClient client = new HttpClient()) {
-    //            var response = await client.GetStringAsync(apiUrl + fromCurrency);
-    //            var rates = JObject.Parse(response)["rates"];
-    //            double convertionRate = rates[toCurrency].Value<double>();
-    //            return amount * convertionRate;
-    //        }
-    //    }
-    //}
 
     public class TransactionManager {
         private readonly AccountsContext context = new AccountsContext();
         private CurrencyConverter _currencyConverter;
 
         public TransactionManager() {
-            //context.Accounts.Add(BankAccount.GetBankAccount(1111_1111_1111_1111));
-            //context.SaveChanges();
             _currencyConverter = new CurrencyConverter();
         }
 
-        public void Transfer(int fromAccountId, int toAccountId, double amount, string password, string fromCurrency = "RUB", string toCurrency = "RUB") {
+        public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount, string password, string fromCurrency = "RUB", string toCurrency = "RUB") {
             var fromAccount = context.Accounts.FirstOrDefault(acc => acc.Id == fromAccountId);
             var toAccount = context.Accounts.FirstOrDefault(acc => acc.Id == toAccountId);
 
@@ -143,10 +139,19 @@ namespace BankSystem {
 
             try {
                 fromAccount.Withdraw(amount, password, fromCurrency);
-                toAccount.Deposit(amount, toCurrency);
+                var currencyConverter = new CurrencyConverter();
+
+                decimal finalAmount = 0;
+                if (fromCurrency == toCurrency) {
+                    finalAmount = amount;
+                } else {
+                    finalAmount = await currencyConverter.Convert(fromCurrency, toCurrency, amount);
+                }
+                toAccount.Deposit(finalAmount, toCurrency);
                 Console.WriteLine("Деньги успешно переведены");
-            } catch (Exception ex) {
-                Console.WriteLine($"Error: ${ex.Message}");
+            }
+            catch (Exception ex) {
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -156,11 +161,14 @@ namespace BankSystem {
         }
 
         public void RemoveAccount(BankAccount account) {
+            foreach (var currency in context.Currencies) {
+                if (currency.BankAccount == account) context.Currencies.Remove(currency);
+            }
             context.Accounts.Remove(account);
             context.SaveChanges();
         }
 
-        public bool Deposit(long accountId, double amount, string currency) {
+        public bool Deposit(Guid accountId, decimal amount, string currency) {
             BankAccount? account = context.Accounts.FirstOrDefault(a => a.Id == accountId);
             if (account == null) return false;
             account.Deposit(amount, currency);
@@ -188,7 +196,7 @@ namespace BankSystem {
         public async Task<decimal> Convert(string fromCurrency, string toCurrency, decimal amount) {
             var response = await _httpClient.GetStringAsync($"https://api.exchangerate-api.com/v4/latest/{fromCurrency}");
             var rates = JObject.Parse(response)["rates"];
-            var rate = rates[toCurrency].Value<decimal>();
+            var rate = rates![toCurrency]!.Value<decimal>();
             return amount * rate;
         }
     }

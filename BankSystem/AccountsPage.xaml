@@ -21,12 +21,20 @@
             <Setter Property="FontSize" Value="14"       />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
+        <ControlTemplate x:Key="CustomButtonTemplate" TargetType="Button">
+            <Border Background="{TemplateBinding Background}"
+                Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+                BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
+                Padding="{TemplateBinding Padding}" CornerRadius="4">
+                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </Border>
+        </ControlTemplate>
     </Page.Resources>
 
     <Grid Background="#B8D8C8">
         <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
             <ListView x:Name="AccountItems" Background="Transparent" HorizontalAlignment="Left"
-                      ScrollViewer.CanContentScroll="False" Width="500">
+                      ScrollViewer.CanContentScroll="False" Width="500" SelectionChanged="AccountItems_SelectionChanged">
                 <!--Пример отображения банковского аккаунта-->
                 <Border Background="#2E8B57" Width="460" Height="60" CornerRadius="8"
                         BorderThickness="1" BorderBrush="Black">
@@ -35,45 +43,50 @@
                                    VerticalAlignment="Center" HorizontalAlignment="Center"
                                    Margin="0 0 100 0" Foreground="#FFC3A0"
                                    TextDecorations="None"/>
-                        <TextBlock Text="Баланс" Foreground="DarkGray" FontSize="15"
-                                   VerticalAlignment="Top" HorizontalAlignment="Right"
-                                   Margin="0 3 10 0"/>
-                        <TextBlock Text="500p" HorizontalAlignment="Right"
-                                    VerticalAlignment="Bottom" FontSize="15"
-                                    Foreground="DarkGray" Margin="0 0 10 3"/>
                     </Grid>
                 </Border>
             </ListView>
-            <Border Background="#B0B0B0" Width="240" CornerRadius="10 0 0 10">
+        </StackPanel>
+        <Canvas>
+            <Border Background="#B0B0B0" Width="240" Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Page}}" CornerRadius="10 0 0 10"
+                Canvas.Top="0" Canvas.Right="0">
                 <Grid>
                     <Border Background="#B0B0B0" Margin="5 5 5 40"
-                            BorderThickness="0.4 0.4 1 1" BorderBrush="Black" CornerRadius="0 0 10 10">
+                        BorderThickness="0.4 0.4 1 1" BorderBrush="Black" CornerRadius="0 0 10 10">
                         <!--Вот тут продолжаем писать код-->
-                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <StackPanel x:Name="Properties" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <Border Style="{StaticResource InfoTileStyle}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Label Content="ID" Style="{StaticResource InfoTileLabelStyle}" />
-                                    <TextBox Width="140"/>
+                                    <TextBox x:Name="propertyId" Width="140" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                                 </StackPanel>
                             </Border>
                             <Border Style="{StaticResource InfoTileStyle}">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Label Content="Password" Style="{StaticResource InfoTileLabelStyle}" />
-                                    <TextBox Width="140" />
+                                    <TextBox x:Name="propertyPassword" Width="140" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                                 </StackPanel>
                             </Border>
+                            <Label Content="Balances" HorizontalContentAlignment="Center"/>
+                            <StackPanel x:Name="PropertiesCurrenciesBallances">
+                                
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom" Margin="0 0 0 8">
-                        <Button Content="Добавить" FontSize="14" Width="80"
-                                Click="AddAccountButton_Click"/>
-                        <Rectangle Width="20"/>
-                        <Button Content="Удалить" FontSize="14" Width="80"
-                                Click="DeleteAccountButton_Click"/>
+                        VerticalAlignment="Bottom" Margin="0 0 0 8">
+                        <Button Content="Добавить" FontSize="14" Width="80" Padding="4 2"
+                            Template="{StaticResource CustomButtonTemplate}" Click="AddAccountButton_Click" />
+                        <Rectangle Width="15"/>
+                        <Button Content="Удалить" FontSize="14" Width="80" Padding="4 2"
+                            Template="{StaticResource CustomButtonTemplate}" Click="DeleteAccountButton_Click" />
+                        <Rectangle Width="15" />
+                        <Button Background="#333" Template="{StaticResource CustomButtonTemplate}" Click="CopyButton_Click">
+                            <Image Source="/images/copy_icon.png" Width="20" />
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
-        </StackPanel>
+        </Canvas>
     </Grid>
 </Page>

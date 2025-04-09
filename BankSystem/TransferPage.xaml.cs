@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql.EntityFrameworkCore.PostgreSQL.Query.ExpressionTranslators.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,9 @@ namespace BankSystem {
             InitializeComponent();
             this.transactionManager = transactionManager;
 
-            currencies1.ItemsSource = BankAccount.Currencies;
-            currencies2.ItemsSource = BankAccount.Currencies;
-            currencies3.ItemsSource = BankAccount.Currencies;
+            currencies1.ItemsSource = Currency.Currencies;
+            currencies2.ItemsSource = Currency.Currencies;
+            currencies3.ItemsSource = Currency.Currencies;
 
             currencies1.SelectedIndex = 0;
             currencies2.SelectedIndex = 0;
@@ -122,20 +123,29 @@ namespace BankSystem {
             border32.Visibility = Visibility.Collapsed;
         }
 
-        private void depositButton_Click(object sender, RoutedEventArgs e) {
+        private async void depositButton_Click(object sender, RoutedEventArgs e) {
             if (sender == depositButton) {
                 try {
-                    long accountId = long.Parse(tbAccount3.Text);
-                    double amount = double.Parse(tbAmount3.Text);
+                    Guid accountId = new Guid(tbAccount3.Text.ToString());
+                    decimal amount = decimal.Parse(tbAmount3.Text);
                     string currency = currencies3.Text;
                     if (transactionManager is null) return;
                     transactionManager.Deposit(accountId, amount, currency);
+                    transactionManager.SaveChanges();
                 } catch (Exception ex) {
                     MessageBox.Show(ex.Message);
                 }
             } else if (sender == transferButton) {
+                var id1 = new Guid(tbAccount1.Text.ToString());
+                var id2 = new Guid(tbAccount2.Text.ToString());
+                var amount = decimal.Parse(tbAmount2.Text.ToString());
+                var password = tbPassword1.Text.ToString();
+                var currency1 = currencies1.SelectedItem.ToString()!;
+                var currency2 = currencies2.SelectedItem.ToString()!;
 
+                await transactionManager!.Transfer(id1, id2, amount, password, currency1, currency2);
             }
+            transactionManager!.SaveChanges();
         }
     }
 }
