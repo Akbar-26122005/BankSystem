@@ -129,7 +129,7 @@ namespace BankSystem {
         private CurrencyConverter _currencyConverter;
 
         public TransactionManager() {
-            _currencyConverter = new CurrencyConverter();
+            _currencyConverter = new CurrencyConverter(new HttpClient());
         }
 
         public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount, string password, string fromCurrency = "RUB", string toCurrency = "RUB") {
@@ -142,7 +142,7 @@ namespace BankSystem {
 
             try {
                 fromAccount.Withdraw(amount, password, fromCurrency);
-                var currencyConverter = new CurrencyConverter();
+                var currencyConverter = new CurrencyConverter(new HttpClient());
 
                 decimal finalAmount = 0;
                 if (fromCurrency == toCurrency) {
@@ -204,8 +204,8 @@ namespace BankSystem {
     public class CurrencyConverter {
         private readonly HttpClient _httpClient;
 
-        public CurrencyConverter() {
-            _httpClient = new HttpClient();
+        public CurrencyConverter(HttpClient httpClient) {
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         public async Task<decimal> Convert(string fromCurrency, string toCurrency, decimal amount) {
@@ -215,6 +215,21 @@ namespace BankSystem {
             return amount * rate;
         }
     }
+
+    //public class CurrencyConverter {
+    //    private readonly HttpClient _httpClient;
+
+    //    public CurrencyConverter() {
+    //        _httpClient = new HttpClient();
+    //    }
+
+    //    public async Task<decimal> Convert(string fromCurrency, string toCurrency, decimal amount) {
+    //        var response = await _httpClient.GetStringAsync($"https://api.exchangerate-api.com/v4/latest/{fromCurrency}");
+    //        var rates = JObject.Parse(response)["rates"];
+    //        var rate = rates![toCurrency]!.Value<decimal>();
+    //        return amount * rate;
+    //    }
+    //}
 
     // Модуль нотификации пользователей
     public class EmailNotifier {
